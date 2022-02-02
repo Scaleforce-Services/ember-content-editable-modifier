@@ -3,7 +3,6 @@ import Modifier from 'ember-modifier';
 import { action } from '@ember/object';
 
 export default class ContentEditableModifier extends Modifier {
-
   value = undefined;
 
   didInstall() {
@@ -22,9 +21,15 @@ export default class ContentEditableModifier extends Modifier {
   }
 
   didReceiveArguments() {
-    if (this.args.named.disabled && this.element.getAttribute('contenteditable')) {
+    if (
+      this.args.named.disabled &&
+      this.element.getAttribute('contenteditable')
+    ) {
       this.element.removeAttribute('contenteditable');
-    } else if (!this.args.named.disabled && !this.element.getAttribute('contenteditable')) {
+    } else if (
+      !this.args.named.disabled &&
+      !this.element.getAttribute('contenteditable')
+    ) {
       this.element.setAttribute('contenteditable', 'true');
     }
   }
@@ -38,9 +43,9 @@ export default class ContentEditableModifier extends Modifier {
   updateValue() {
     this.value = this.args.named.value;
     if (this.value) {
-      this.element.innerText = this.value;
+      this.element.innerHTML = this.value;
     } else {
-      this.element.innerText = '';
+      this.element.innerHTML = '';
     }
   }
 
@@ -50,7 +55,7 @@ export default class ContentEditableModifier extends Modifier {
 
   @action
   domUpdated() {
-    this.value = this.element.innerText;
+    this.value = this.element.innerHTML;
 
     if (this.args.named.onChange) {
       this.args.named.onChange(this.value);
